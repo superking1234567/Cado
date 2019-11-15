@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class MainManager : MonoBehaviour
 {
     public GameObject btnHome;
+    public GameObject Splash;
+    public GameObject Main;
     public GameObject Home;
     public GameObject Signup;
     public GameObject Login;
@@ -22,12 +24,28 @@ public class MainManager : MonoBehaviour
     void Start()
     {
         FB.Init(this.OnFBInitComplete, this.OnHideUnity);
+        StartCoroutine("showSplash");
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    IEnumerator showSplash()
+    {
+        yield return new WaitForSeconds(3.0f);
+        int index = 1;
+        while (index <= 100)
+        {
+            yield return new WaitForSeconds(0.01f);
+            float val = (float)index / 100.0f;
+            Splash.transform.Find("RawImage").GetComponent<RawImage>().color = new Color(1, 1, 1, 1-val);
+            index++;
+        }
+        yield return new WaitForSeconds(0.3f);
+        Main.GetComponent<SwipeUI>().showUI(1);
     }
 
     private void OnFBInitComplete()
