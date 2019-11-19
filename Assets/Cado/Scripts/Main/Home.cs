@@ -8,7 +8,6 @@ using UnityEngine.Networking;
 public class Home : MonoBehaviour
 {
     public MainManager mm;
-    public SwipeUI sui;
 
     // Start is called before the first frame update
     void Start()

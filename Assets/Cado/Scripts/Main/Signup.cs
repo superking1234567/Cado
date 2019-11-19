@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class Signup : MonoBehaviour
 {
     public MainManager mm;
-    public SwipeUI sui;
 
     public InputField FirstName;
     public InputField LastName;

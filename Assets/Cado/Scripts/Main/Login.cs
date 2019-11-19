@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class Login : MonoBehaviour
 {
     public MainManager mm;
-    public SwipeUI sui;
 
     public InputField Email;
     public InputField Password;
