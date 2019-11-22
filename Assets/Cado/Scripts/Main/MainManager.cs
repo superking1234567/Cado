@@ -337,7 +337,4 @@ public class MainManager : MonoBehaviour
 
         gotoDashboard();
     }
-
-
-
 }
