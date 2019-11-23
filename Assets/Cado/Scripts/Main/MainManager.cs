@@ -18,6 +18,7 @@ public class MainManager : MonoBehaviour
     public GameObject Question;
     public GameObject Dashboard;
     public GameObject AlertPopup;
+    public GameObject LoadingPopup;
 
     public bool isQuit = false;
     private string push_token = "test";
@@ -295,9 +296,12 @@ public class MainManager : MonoBehaviour
         formData.Add(new MultipartFormDataSection("email", UnityWebRequest.EscapeURL(email)));
         formData.Add(new MultipartFormDataSection("password", UnityWebRequest.EscapeURL(password)));
 
+        int device_type = 0; //unknown
 #if UNITY_ANDROID
+        device_type = 1;
         formData.Add(new MultipartFormDataSection("device_type", "1"));
 #elif UNITY_IOS
+        device_type = 2;
         formData.Add(new MultipartFormDataSection("device_type", "2"));
 #endif
         formData.Add(new MultipartFormDataSection("push_token", UnityWebRequest.EscapeURL(push_token)));
@@ -305,10 +309,10 @@ public class MainManager : MonoBehaviour
         string requestURL = Global.DOMAIN + "/API/Login.aspx";
         UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
 
-        StartCoroutine(ResponseEmailLogin(www));
+        StartCoroutine(ResponseEmailLogin(www, email, password, device_type));
     }
 
-    IEnumerator ResponseEmailLogin(UnityWebRequest www)
+    IEnumerator ResponseEmailLogin(UnityWebRequest www, string email, string password, int device_type)
     {
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
@@ -335,6 +339,44 @@ public class MainManager : MonoBehaviour
             yield break;
         }
 
+        long id = long.Parse(json["id"].ToString());
+        string firstname = UnityWebRequest.UnEscapeURL(json["firstname"].ToString());
+        string lastname = UnityWebRequest.UnEscapeURL(json["lastname"].ToString());
+        string question_list = UnityWebRequest.UnEscapeURL(json["question_list"].ToString());
+        string last_login = UnityWebRequest.UnEscapeURL(json["last_login"].ToString());
+        string reg_date = UnityWebRequest.UnEscapeURL(json["reg_date"].ToString());
+
+        Global.m_user = new User();
+        Global.m_user.id = id;
+        Global.m_user.email = email;
+        Global.m_user.password = password;
+        Global.m_user.firstname = firstname;
+        Global.m_user.lastname = lastname;
+        Global.m_user.avatar = "";
+        Global.m_user.question_list = "";
+        Global.m_user.is_fb_login = 0;
+        Global.m_user.fb_user_id = -1;
+        Global.m_user.fb_access_token = "";
+        Global.m_user.question_list = question_list;
+        Global.m_user.is_use = 1;
+        Global.m_user.last_login = DateTime.Parse(last_login);
+        Global.m_user.device_type = device_type;
+        Global.m_user.reg_date = DateTime.Parse(reg_date);
+
+        PlayerPrefs.SetInt("auto_login", 1);
+        PlayerPrefs.Save();
+        Global.SaveUserInfo(Global.m_user);
+
         gotoDashboard();
+    }
+
+    public void showLoading()
+    {
+        LoadingPopup.SetActive(true);
+    }
+
+    public void hideLoading()
+    {
+        LoadingPopup.SetActive(false);
     }
 }

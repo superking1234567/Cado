@@ -287,6 +287,7 @@ GameObject:
   - component: {fileID: 8574879635354362762}
   - component: {fileID: 8574879635354362763}
   - component: {fileID: 8574879635354362764}
+  - component: {fileID: 62595018}
   m_Layer: 5
   m_Name: item1
   m_TagString: Untagged
@@ -390,9 +391,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8574879635354362763}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 62595018}
+        m_MethodName: OnItemSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &62595018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8574879635354362766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08e51d62d08432347b36ae1556d5d945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  category_id: 0
 --- !u!1 &8574879636086907517
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +430,7 @@ GameObject:
   - component: {fileID: 8574879636086907513}
   - component: {fileID: 8574879636086907514}
   - component: {fileID: 8574879636086907515}
+  - component: {fileID: 772595259}
   m_Layer: 5
   m_Name: item2
   m_TagString: Untagged
@@ -508,9 +534,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8574879636086907514}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 772595259}
+        m_MethodName: OnItemSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &772595259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8574879636086907517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08e51d62d08432347b36ae1556d5d945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  category_id: 0
 --- !u!1 &8574879636360193495
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,6 +573,7 @@ GameObject:
   - component: {fileID: 8574879636360193491}
   - component: {fileID: 8574879636360193492}
   - component: {fileID: 8574879636360193493}
+  - component: {fileID: 1044830609}
   m_Layer: 5
   m_Name: item0
   m_TagString: Untagged
@@ -626,6 +677,30 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8574879636360193492}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1044830609}
+        m_MethodName: OnItemSelected
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1044830609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8574879636360193495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08e51d62d08432347b36ae1556d5d945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  category_id: 0

@@ -10,6 +10,7 @@ public static class Global
     public static int screenID = 1; //1: home, 2: login, 3: signup, 4: main
 
     public static User m_user = null;
+    public static List<Category> categoryList = new List<Category>();
 
     public static void SaveUserInfo(User user)
     {
@@ -72,6 +73,22 @@ public class User
     public float point_amount;
 
     public User() { }
+}
+
+public class Category
+{
+    public long id;
+    public string name;
+    public int type;
+
+    public Category(long id, string name,int type)
+    {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
+
+    public Category() { }
 }
 
 
