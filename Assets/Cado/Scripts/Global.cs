@@ -11,7 +11,7 @@ public static class Global
 
     public static User m_user = null;
     public static List<Category> categoryList = new List<Category>();
-    public static List<Product> productList = new List<Product>();
+    public static List<Product> productList = null;
 
     public static void SaveUserInfo(User user)
     {

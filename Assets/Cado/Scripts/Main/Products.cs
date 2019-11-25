@@ -25,9 +25,12 @@ public class Products : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Global.m_user != null && !isUpdating && Global.productList.Count < 5)
+        if (Global.m_user != null && !isUpdating && Global.productList != null)
         {
-            GetProductList();
+            if(Global.productList.Count < 5)
+            {
+                GetProductList();
+            }
         }
     }
 

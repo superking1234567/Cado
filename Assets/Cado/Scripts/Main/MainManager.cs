@@ -99,6 +99,7 @@ public class MainManager : MonoBehaviour
         }
         else if(uiNumber == 2)
         {//ProductPanel
+            Global.productList = new List<Product>();
             Categories.transform.localPosition = new Vector3(512, 0, 0);
             Products.transform.localPosition = new Vector3(0, 0, 0);
         }
