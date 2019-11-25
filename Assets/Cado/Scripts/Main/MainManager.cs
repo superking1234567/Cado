@@ -16,7 +16,11 @@ public class MainManager : MonoBehaviour
     public GameObject Signup;
     public GameObject Login;
     public GameObject Question;
+
     public GameObject Dashboard;
+    public GameObject Categories;
+    public GameObject Products;
+
     public GameObject AlertPopup;
     public GameObject LoadingPopup;
 
@@ -86,8 +90,18 @@ public class MainManager : MonoBehaviour
         Question.GetComponent<SwipeUI>().showUI(1);
     }
 
-    public void gotoDashboard()
+    public void gotoDashboard(int uiNumber = 1)
     {
+        if(uiNumber == 1)
+        {//Categories
+            Categories.transform.localPosition = new Vector3(0, 0, 0);
+            Products.transform.localPosition = new Vector3(512, 0, 0);
+        }
+        else if(uiNumber == 2)
+        {//ProductPanel
+            Categories.transform.localPosition = new Vector3(512, 0, 0);
+            Products.transform.localPosition = new Vector3(0, 0, 0);
+        }
         Dashboard.GetComponent<SwipeUI>().showUI(1);
     }
 
@@ -367,7 +381,7 @@ public class MainManager : MonoBehaviour
         PlayerPrefs.Save();
         Global.SaveUserInfo(Global.m_user);
 
-        gotoDashboard();
+        gotoDashboard(2);
     }
 
     public void showLoading()

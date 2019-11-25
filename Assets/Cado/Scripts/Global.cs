@@ -11,6 +11,7 @@ public static class Global
 
     public static User m_user = null;
     public static List<Category> categoryList = new List<Category>();
+    public static List<Product> productList = new List<Product>();
 
     public static void SaveUserInfo(User user)
     {
@@ -33,7 +34,7 @@ public static class Global
 
     public static User GetUserInfo()
     {
-        User user = new User(); Debug.Log("user.id " + PlayerPrefs.GetString("user.id"));
+        User user = new User();
         user.id = long.Parse(PlayerPrefs.GetString("user.id"));
         user.email = PlayerPrefs.GetString("user.email");
         user.password = PlayerPrefs.GetString("user.password");
@@ -51,6 +52,22 @@ public static class Global
 
         return user;
     }
+
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        int n = list.Count;
+        System.Random rng = new System.Random();
+
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
+    }
+
 }
 
 public class User
@@ -79,16 +96,36 @@ public class Category
 {
     public long id;
     public string name;
-    public int type;
+    public int market_id;
 
-    public Category(long id, string name,int type)
+    public Category(long id, string name,int market_id)
     {
         this.id = id;
         this.name = name;
-        this.type = type;
+        this.market_id = market_id;
     }
 
     public Category() { }
+}
+
+public class Product
+{
+    public long product_id;
+    public string title;
+    public string description;
+    public string image;
+    public int market_id;
+
+
+    public Product(long product_id, string title, string description, int market_id, string image)
+    {
+        this.product_id = product_id;
+        this.title = title;
+        this.description = description;
+        this.image = image;
+    }
+
+    public Product() { }
 }
 
 

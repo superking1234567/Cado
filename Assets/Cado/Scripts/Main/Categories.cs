@@ -85,7 +85,7 @@ public class Categories : MonoBehaviour
 
                     temp.transform.Find("item" + j).GetComponent<CategorySelect>().category_id = long.Parse(category_id);
                     temp.transform.Find("item" + j).GetComponent<CategorySelect>().category_name = category_name;
-                    temp.transform.Find("item" + j).GetComponent<CategorySelect>().category_type = 1;
+                    temp.transform.Find("item" + j).GetComponent<CategorySelect>().market_id = 1;
                     temp.transform.Find("item" + j + "/Text").GetComponent<Text>().text = category_name;
 
                     temp.transform.SetParent(categoryList.transform);

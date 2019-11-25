@@ -7,7 +7,7 @@ public class CategorySelect : MonoBehaviour
 {
     public long category_id = 0;
     public string category_name = "";
-    public int category_type = 0;
+    public int market_id = 0;
 
     private Button btnCategory;
     private bool isSelected = false;
@@ -32,7 +32,7 @@ public class CategorySelect : MonoBehaviour
             isSelected = true;
             ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
 
-            Category category = new Category(category_id, category_name, category_type);
+            Category category = new Category(category_id, category_name, market_id);
             Global.categoryList.Add(category);
         }
         else
