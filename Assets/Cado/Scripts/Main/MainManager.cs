@@ -30,7 +30,6 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FB.Init(this.OnFBInitComplete, this.OnHideUnity);
         StartCoroutine("showSplash");
     }
 
@@ -51,8 +50,8 @@ public class MainManager : MonoBehaviour
             Splash.transform.Find("RawImage").GetComponent<RawImage>().color = new Color(1, 1, 1, 1-val);
             index++;
         }
-        yield return new WaitForSeconds(0.3f);
-        Main.GetComponent<SwipeUI>().showUI(1);
+        //yield return new WaitForSeconds(0.3f);
+        FB.Init(this.OnFBInitComplete, this.OnHideUnity);
     }
 
     private void OnFBInitComplete()
@@ -73,7 +72,11 @@ public class MainManager : MonoBehaviour
 
         if(FB.IsInitialized && FB.IsLoggedIn)
         {
-            gotoDashboard();
+            FBLogin(AccessToken.CurrentAccessToken.UserId, AccessToken.CurrentAccessToken.TokenString);
+        }
+        else
+        {
+            Main.GetComponent<SwipeUI>().showUI(1);
         }
     }
 
@@ -84,9 +87,16 @@ public class MainManager : MonoBehaviour
         Debug.Log("Is game shown: " + isGameShown);
     }
 
-    public void gotoQuestion()
+    public void gotoQuestion(int uiNumber = 1)
     {
-        Signup.GetComponent<SwipeUI>().hideUI(-1);
+        if(uiNumber == 1)
+        {//Facebook Login
+            Home.GetComponent<SwipeUI>().hideUI(-1);
+        }
+        else if(uiNumber == 2)
+        {//Email Login
+            Signup.GetComponent<SwipeUI>().hideUI(-1);
+        }
         Question.GetComponent<SwipeUI>().showUI(1);
     }
 
@@ -131,9 +141,12 @@ public class MainManager : MonoBehaviour
         formData.Add(new MultipartFormDataSection("fb_user_id", UnityWebRequest.EscapeURL(fb_user_id)));
         formData.Add(new MultipartFormDataSection("fb_access_token", UnityWebRequest.EscapeURL(fb_access_token)));
 
+        int device_type = 0; //unknown
 #if UNITY_ANDROID
+        device_type = 1;
         formData.Add(new MultipartFormDataSection("device_type", "1"));
 #elif UNITY_IOS
+        device_type = 2;
         formData.Add(new MultipartFormDataSection("device_type", "2"));
 #endif
 
@@ -142,10 +155,10 @@ public class MainManager : MonoBehaviour
         string requestURL = Global.DOMAIN + "/API/Signup.aspx";
         UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
 
-        StartCoroutine(ResponseFBSignup(www));
+        StartCoroutine(ResponseFBSignup(www, device_type));
     }
 
-    IEnumerator ResponseFBSignup(UnityWebRequest www)
+    IEnumerator ResponseFBSignup(UnityWebRequest www, int device_type)
     {
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
@@ -172,7 +185,28 @@ public class MainManager : MonoBehaviour
             yield break;
         }
 
-        gotoDashboard();
+        long id = long.Parse(json["id"].ToString());
+        int is_use = int.Parse(json["is_use"].ToString());
+        string reg_date = json["reg_date"].ToString();
+
+        //move to Question
+        Global.m_user = new User();
+        Global.m_user.id = id;
+        Global.m_user.email = "";
+        Global.m_user.password = "";
+        Global.m_user.firstname = "";
+        Global.m_user.lastname = "";
+        Global.m_user.avatar = "";
+        Global.m_user.question_list = "";
+        Global.m_user.is_fb_login = 0;
+        Global.m_user.fb_user_id = -1;
+        Global.m_user.fb_access_token = "";
+        Global.m_user.is_use = is_use;
+        Global.m_user.last_login = DateTime.Now;
+        Global.m_user.device_type = device_type;
+        Global.m_user.reg_date = DateTime.Parse(reg_date);
+
+        gotoQuestion(1);
     }
 
     public void FBLogin(string fb_user_id, string fb_access_token)
@@ -182,9 +216,12 @@ public class MainManager : MonoBehaviour
         formData.Add(new MultipartFormDataSection("fb_user_id", UnityWebRequest.EscapeURL(fb_user_id)));
         formData.Add(new MultipartFormDataSection("fb_access_token", UnityWebRequest.EscapeURL(fb_access_token)));
 
+        int device_type = 0; //unknown
 #if UNITY_ANDROID
+        device_type = 1;
         formData.Add(new MultipartFormDataSection("device_type", "1"));
 #elif UNITY_IOS
+        device_type = 2;
         formData.Add(new MultipartFormDataSection("device_type", "2"));
 #endif
 
@@ -193,10 +230,10 @@ public class MainManager : MonoBehaviour
         string requestURL = Global.DOMAIN + "/API/Login.aspx";
         UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
 
-        StartCoroutine(ResponseFBLogin(www));
+        StartCoroutine(ResponseFBLogin(www, fb_user_id, fb_access_token, device_type));
     }
 
-    IEnumerator ResponseFBLogin(UnityWebRequest www)
+    IEnumerator ResponseFBLogin(UnityWebRequest www, string fb_user_id, string fb_access_token,  int device_type)
     {
         yield return www.SendWebRequest();
         if (www.isNetworkError || www.isHttpError)
@@ -223,7 +260,35 @@ public class MainManager : MonoBehaviour
             yield break;
         }
 
-        gotoDashboard();
+        long id = long.Parse(json["id"].ToString());
+        string firstname = UnityWebRequest.UnEscapeURL(json["firstname"].ToString());
+        string lastname = UnityWebRequest.UnEscapeURL(json["lastname"].ToString());
+        string question_list = UnityWebRequest.UnEscapeURL(json["question_list"].ToString());
+        string last_login = UnityWebRequest.UnEscapeURL(json["last_login"].ToString());
+        string reg_date = UnityWebRequest.UnEscapeURL(json["reg_date"].ToString());
+
+        Global.m_user = new User();
+        Global.m_user.id = id;
+        Global.m_user.email = "";
+        Global.m_user.password = "";
+        Global.m_user.firstname = firstname;
+        Global.m_user.lastname = lastname;
+        Global.m_user.avatar = "";
+        Global.m_user.question_list = "";
+        Global.m_user.is_fb_login = 1;
+        Global.m_user.fb_user_id = long.Parse(fb_user_id);
+        Global.m_user.fb_access_token = fb_access_token;
+        Global.m_user.question_list = question_list;
+        Global.m_user.is_use = 1;
+        Global.m_user.last_login = DateTime.Parse(last_login);
+        Global.m_user.device_type = device_type;
+        Global.m_user.reg_date = DateTime.Parse(reg_date);
+
+        PlayerPrefs.SetInt("auto_login", 1);
+        PlayerPrefs.Save();
+        Global.SaveUserInfo(Global.m_user);
+
+        gotoDashboard(2);
     }
 
     public void EmailSignup(string firstname, string lastname, string email, string password)
@@ -300,9 +365,8 @@ public class MainManager : MonoBehaviour
         Global.m_user.device_type = device_type;
         Global.m_user.reg_date = DateTime.Parse(reg_date);
 
-        gotoQuestion();
+        gotoQuestion(2);
     }
-
 
     public void EmailLogin(string email, string password)
     {
