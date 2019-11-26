@@ -21,6 +21,7 @@ public class Dashboard : MonoBehaviour
 
     public void gotoProductPanel()
     {
+        Global.productList = new List<Product>();
         Categories.GetComponent<SwipeUI>().hideUI(-1);
         ProductPanel.GetComponent<SwipeUI>().showUI(1);
     }

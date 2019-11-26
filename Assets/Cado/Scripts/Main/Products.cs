@@ -16,6 +16,9 @@ public class Products : MonoBehaviour
     private bool isFirstLoading = true;
 
     private List<GameObject> cardList = new List<GameObject>();
+    private List<Product> productList = new List<Product>();
+
+    private Vector3 mouseDownPos;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +33,35 @@ public class Products : MonoBehaviour
             if(Global.productList.Count < 5)
             {
                 GetProductList();
+            }
+        }
+
+        if(cardList.Count > 0)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                mouseDownPos = Input.mousePosition;
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                float deltaValue = (Input.mousePosition.x - mouseDownPos.x);
+                //Debug.Log("--deltaValue--" + deltaValue + "--screenWidth--" + Screen.width);
+                if (Input.mousePosition.x > mouseDownPos.x)
+                {
+                    if (deltaValue / Screen.width > 0.2f)
+                    {
+                        Debug.Log("You dragged right!");
+                        onbtnPresent();
+                    }
+                }
+                else if (Input.mousePosition.x < mouseDownPos.x)
+                {
+                    if (deltaValue / Screen.width < -0.2f)
+                    {
+                        Debug.Log("You dragged right!");
+                        onbtnBin();
+                    }
+                }
             }
         }
     }
@@ -140,6 +172,7 @@ public class Products : MonoBehaviour
             temp.SetActive(true);
 
             cardList.Add(temp);
+            productList.Add(product);
 
             height += 20.0f;
         }
@@ -184,6 +217,8 @@ public class Products : MonoBehaviour
         temp.SetActive(true);
 
         cardList.Insert(0, temp);
+        productList.Insert(0, product);
+
         cardList[0].transform.SetAsFirstSibling();
         cardList[0].transform.GetComponent<CardAni>().ZoomAni(5, 0.0f, 0.9f);
     }
@@ -197,6 +232,8 @@ public class Products : MonoBehaviour
 
         GameObject topCard = cardList[cardList.Count - 1];
         cardList.RemoveAt(cardList.Count - 1);
+        Product product = productList[productList.Count - 1];
+        productList.RemoveAt(productList.Count - 1);
 
         Vector3 pos11 = topCard.transform.localPosition;
         Vector3 pos12 = new Vector3(-512.0f, pos11.y, pos11.z);
@@ -215,6 +252,7 @@ public class Products : MonoBehaviour
         thirdCard.transform.GetComponent<CardAni>().ZoomAni(5, 0.9f, 0.95f);
 
         StartCoroutine(AddCard());
+        StartCoroutine(SetRating(product, 2));
     }
 
     public void onbtnPresent()
@@ -226,6 +264,8 @@ public class Products : MonoBehaviour
 
         GameObject topCard = cardList[cardList.Count - 1];
         cardList.RemoveAt(cardList.Count - 1);
+        Product product = productList[productList.Count - 1];
+        productList.RemoveAt(productList.Count - 1);
 
         Vector3 pos11 = topCard.transform.localPosition;
         Vector3 pos12 = new Vector3(512.0f, pos11.y, pos11.z);
@@ -244,10 +284,54 @@ public class Products : MonoBehaviour
         thirdCard.transform.GetComponent<CardAni>().ZoomAni(5, 0.9f, 0.95f);
 
         StartCoroutine(AddCard());
+        StartCoroutine(SetRating(product, 1));
+    }
+
+    IEnumerator SetRating(Product product, int value)
+    {
+        yield return new WaitForEndOfFrame();
+
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        formData.Add(new MultipartFormDataSection("user_id", Global.m_user.id.ToString()));
+        formData.Add(new MultipartFormDataSection("product_id", product.product_id.ToString()));
+        formData.Add(new MultipartFormDataSection("title", UnityWebRequest.EscapeURL(product.title)));
+        formData.Add(new MultipartFormDataSection("description", UnityWebRequest.EscapeURL(product.description)));
+        formData.Add(new MultipartFormDataSection("image", UnityWebRequest.EscapeURL(product.image)));
+        formData.Add(new MultipartFormDataSection("market_id", product.market_id.ToString()));
+        formData.Add(new MultipartFormDataSection("value", value.ToString()));
+
+        string requestURL = Global.DOMAIN + "/API/SetRating.aspx";
+        UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
+
+        yield return www.SendWebRequest();
+        if (www.isNetworkError || www.isHttpError)
+        {
+            mm.isQuit = true;
+            mm.ShowAlertPopup("Please confirm internet.");
+            yield break;
+        }
+
+        string resultData = www.downloadHandler.text;
+        if (string.IsNullOrEmpty(resultData))
+        {
+            mm.ShowAlertPopup("Server api error!");
+            yield break;
+        }
+
+        JsonData json = JsonMapper.ToObject(resultData);
+        string response = json["success"].ToString();
+
+        if (response != "1")
+        {
+            string resText = json["responseText"].ToString();
+            mm.ShowAlertPopup(resText);
+            yield break;
+        }
     }
 
     public void onbtnFavorite()
     {
 
     }
+
 }
