@@ -219,7 +219,38 @@ public class Categories : MonoBehaviour
 
     public void onbtnWish()
     {
+        if (isbtnWishSelected)
+        {
+            return;
+        }
 
+        Color colorV;
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
+        ColorBlock theColor = btnEtsy.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnEtsy.GetComponent<Button>().colors = theColor;
+        btnEtsy.transform.Find("Text").GetComponent<Text>().color = Color.black;
+        isbtnEtsySelected = false;
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
+        theColor = btnBestBuy.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnBestBuy.GetComponent<Button>().colors = theColor;
+        btnBestBuy.transform.Find("Text").GetComponent<Text>().color = Color.black;
+        isbtnBestBuySelected = false;
+
+        ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
+        theColor = btnWish.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnWish.GetComponent<Button>().colors = theColor;
+        btnWish.transform.Find("Text").GetComponent<Text>().color = Color.white;
+        isbtnWishSelected = true;
+
+        GetCategoryList(3);
     }
 
     public void SetCategoryList()
