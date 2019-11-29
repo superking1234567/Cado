@@ -5,17 +5,32 @@ using UnityEngine.UI;
 
 public class CategorySelect : MonoBehaviour
 {
-    public long category_id = 0;
+    public string category_id = "";
     public string category_name = "";
     public int market_id = 0;
 
     private Button btnCategory;
-    private bool isSelected = false;
+    public bool isSelected = false;
 
     // Start is called before the first frame update
     void Start()
     {
         btnCategory = this.transform.GetComponent<Button>();
+
+        Color colorV;
+        if (isSelected)
+        {
+            ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
+        }
+        else
+        {
+            ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
+        }
+
+        ColorBlock theColor = btnCategory.colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnCategory.colors = theColor;
     }
 
     // Update is called once per frame

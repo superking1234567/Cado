@@ -10,13 +10,24 @@ public class Categories : MonoBehaviour
     public GameObject categoryList;
     public GameObject categoryPrefab;
 
+    public GameObject btnEtsy;
+    public GameObject btnBestBuy;
+    public GameObject btnWish;
+
+    public GameObject LoadingBar;
+
+    public bool isbtnEtsySelected = false;
+    public bool isbtnBestBuySelected = false;
+    public bool isbtnWishSelected = false;
+
     public MainManager mm;
     public Dashboard dashboard;
 
     // Start is called before the first frame update
     void Start()
     {
-        GetCategoryList();
+        initCategoryUI();
+        GetCategoryList(1);
     }
 
     // Update is called once per frame
@@ -25,7 +36,22 @@ public class Categories : MonoBehaviour
         
     }
 
-    public void GetCategoryList()
+    public void initCategoryUI()
+    {
+        Color colorV;
+        ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
+
+        ColorBlock theColor = btnEtsy.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnEtsy.GetComponent<Button>().colors = theColor;
+        btnEtsy.transform.Find("Text").GetComponent<Text>().color = Color.white;
+        isbtnEtsySelected = true;
+
+        GetCategoryList(1);
+    }
+
+    public void GetCategoryList(int market_id)
     {
         foreach (Transform child in categoryList.transform)
         {
@@ -33,14 +59,19 @@ public class Categories : MonoBehaviour
         }
         Resources.UnloadUnusedAssets();
 
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        formData.Add(new MultipartFormDataSection("market_id", market_id.ToString()));
+
         string requestURL = Global.DOMAIN + "/API/GetCategoryList.aspx";
-        UnityWebRequest www = UnityWebRequest.Get(requestURL);
-        StartCoroutine(ResponseGetCategoryList(www));
+        UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
+        StartCoroutine(ResponseGetCategoryList(www, market_id));
     }
 
-    IEnumerator ResponseGetCategoryList(UnityWebRequest www)
+    IEnumerator ResponseGetCategoryList(UnityWebRequest www, int market_id)
     {
+        LoadingBar.SetActive(true);
         yield return www.SendWebRequest();
+        LoadingBar.SetActive(false);
         if (www.isNetworkError || www.isHttpError)
         {
             mm.isQuit = true;
@@ -66,7 +97,7 @@ public class Categories : MonoBehaviour
         }
 
         GameObject temp;
-        for (int i=0; i< json["etsy_categories"].Count; i+=3)
+        for (int i=0; i< json["categories"].Count; i+=3)
         {
             temp = Instantiate(categoryPrefab) as GameObject;
             temp.SetActive(false);
@@ -74,26 +105,31 @@ public class Categories : MonoBehaviour
 
             for(int j=0; j<3; j++)
             {
-                if(i+j >= json["etsy_categories"].Count)
+                if(i+j >= json["categories"].Count)
                 { 
                     temp.transform.Find("item" + j).gameObject.SetActive(false);
                 }
                 else
                 {
-                    string category_id = json["etsy_categories"][i + j]["id"].ToString();
-                    string category_name = json["etsy_categories"][i + j]["name"].ToString();
+                    string category_id = json["categories"][i + j]["id"].ToString();
+                    string category_name = json["categories"][i + j]["name"].ToString();
 
-                    temp.transform.Find("item" + j).GetComponent<CategorySelect>().category_id = long.Parse(category_id);
+                    temp.transform.Find("item" + j).GetComponent<CategorySelect>().category_id = category_id;
                     temp.transform.Find("item" + j).GetComponent<CategorySelect>().category_name = category_name;
-                    temp.transform.Find("item" + j).GetComponent<CategorySelect>().market_id = 1;
+                    temp.transform.Find("item" + j).GetComponent<CategorySelect>().market_id = market_id;
                     temp.transform.Find("item" + j + "/Text").GetComponent<Text>().text = category_name;
 
-                    temp.transform.SetParent(categoryList.transform);
-                    temp.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    int index = Global.categoryList.FindIndex(x => x.id == category_id && x.market_id == market_id);
+                    if (index > -1)
+                    {
+                        temp.transform.Find("item" + j).GetComponent<CategorySelect>().isSelected = true;
+                    }
                 }
             }
-            temp.SetActive(true);
 
+            temp.transform.SetParent(categoryList.transform);
+            temp.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            temp.SetActive(true);
         }
 
     }
@@ -107,6 +143,83 @@ public class Categories : MonoBehaviour
         }
 
         SetCategoryList();
+    }
+
+    public void onbtnEtsy()
+    {
+        if (isbtnEtsySelected)
+        {
+            return;
+        }
+
+        Color colorV;
+
+        ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
+        ColorBlock theColor = btnEtsy.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnEtsy.GetComponent<Button>().colors = theColor;
+        btnEtsy.transform.Find("Text").GetComponent<Text>().color = Color.white;
+        isbtnEtsySelected = true;
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
+        theColor = btnBestBuy.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnBestBuy.GetComponent<Button>().colors = theColor;
+        btnBestBuy.transform.Find("Text").GetComponent<Text>().color = Color.black;
+        isbtnBestBuySelected = false;
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
+        theColor = btnWish.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnWish.GetComponent<Button>().colors = theColor;
+        btnWish.transform.Find("Text").GetComponent<Text>().color = Color.black;
+        isbtnWishSelected = false;
+
+        GetCategoryList(1);
+    }
+
+    public void onbtnBestBuy()
+    {
+        if (isbtnBestBuySelected)
+        {
+            return;
+        }
+
+        Color colorV;
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
+        ColorBlock theColor = btnEtsy.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnEtsy.GetComponent<Button>().colors = theColor;
+        btnEtsy.transform.Find("Text").GetComponent<Text>().color = Color.black;
+        isbtnEtsySelected = false;
+
+        ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
+        theColor = btnBestBuy.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnBestBuy.GetComponent<Button>().colors = theColor;
+        btnBestBuy.transform.Find("Text").GetComponent<Text>().color = Color.white;
+        isbtnBestBuySelected = true;
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
+        theColor = btnWish.GetComponent<Button>().colors;
+        theColor.normalColor = colorV;
+        theColor.highlightedColor = colorV;
+        btnWish.GetComponent<Button>().colors = theColor;
+        btnWish.transform.Find("Text").GetComponent<Text>().color = Color.black;
+        isbtnWishSelected = false;
+
+        GetCategoryList(2);
+    }
+
+    public void onbtnWish()
+    {
+
     }
 
     public void SetCategoryList()

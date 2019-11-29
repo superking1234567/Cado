@@ -94,11 +94,11 @@ public class User
 
 public class Category
 {
-    public long id;
+    public string id;
     public string name;
     public int market_id;
 
-    public Category(long id, string name,int market_id)
+    public Category(string id, string name,int market_id)
     {
         this.id = id;
         this.name = name;
