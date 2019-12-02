@@ -12,6 +12,14 @@ public class Products : MonoBehaviour
     public GameObject cardPrefab;
     public GameObject Loading;
 
+    public GameObject btnInfo;
+
+    public GameObject DetailPopup;
+    public Text dpTitle;
+    public RawImage dpImage;
+    public Text dpPrice;
+    public Text dpDescription;
+
     private bool isUpdating = false;
     private bool isFirstLoading = true;
 
@@ -174,6 +182,7 @@ public class Products : MonoBehaviour
         }
 
         Loading.SetActive(false);
+        btnInfo.SetActive(true);
 
         float zoomMax = 0.9f;
         for (int i = 0; i < 3; i++)
@@ -330,4 +339,53 @@ public class Products : MonoBehaviour
 
     }
 
+    public void onbtnInfo()
+    {
+        GameObject topCard = cardList[cardList.Count - 1];
+        Product product = productList[productList.Count - 1];
+        dpTitle.text = product.title;
+        dpImage.texture = topCard.transform.Find("imgProduct").GetComponent<RawImage>().texture;
+        dpDescription.text = product.description;
+
+        DetailPopup.GetComponent<ProductDetail>().url = "http://www.google.com";
+        DetailPopup.SetActive(true);
+
+        //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        //formData.Add(new MultipartFormDataSection("market_id", product.market_id.ToString()));
+        //formData.Add(new MultipartFormDataSection("product_id", product.product_id.ToString()));
+
+        //string requestURL = Global.DOMAIN + "/API/GetProduct.aspx";
+        //UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
+        //StartCoroutine(ResponseGetProductList(www));
+    }
+
+    IEnumerator ResponseGetProduct(UnityWebRequest www)
+    {
+        yield return www.SendWebRequest();
+        if (www.isNetworkError || www.isHttpError)
+        {
+            mm.isQuit = true;
+            mm.ShowAlertPopup("Please confirm internet.");
+            yield break;
+        }
+
+        string resultData = www.downloadHandler.text;
+        if (string.IsNullOrEmpty(resultData))
+        {
+            mm.ShowAlertPopup("Server api error!");
+            yield break;
+        }
+
+        JsonData json = JsonMapper.ToObject(resultData);
+        string response = json["success"].ToString();
+
+        if (response != "1")
+        {
+            string resText = json["responseText"].ToString();
+            mm.ShowAlertPopup(resText);
+            yield break;
+        }
+
+        DetailPopup.SetActive(true);
+    }
 }
