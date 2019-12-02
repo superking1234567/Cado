@@ -105,51 +105,19 @@ public class Products : MonoBehaviour
             yield break;
         }
 
-        int market_id = int.Parse(json["market_id"].ToString());
-        if(market_id == 1)
-        {//etsy
-            for (int i = 0; i < json["product_list"].Count; i++)
-            {
-                Product pt = new Product();
-                pt.product_id = long.Parse(json["product_list"][i]["listing_id"].ToString());
-                pt.title = UnityWebRequest.UnEscapeURL(json["product_list"][i]["title"].ToString());
-                pt.description = UnityWebRequest.UnEscapeURL(json["product_list"][i]["description"].ToString());
-                pt.image = UnityWebRequest.UnEscapeURL(json["product_list"][i]["image"].ToString());
-                pt.market_id = 1;
+        for (int i = 0; i < json["product_list"].Count; i++)
+        {
+            Product pt = new Product();
+            pt.product_id = long.Parse(json["product_list"][i]["listing_id"].ToString());
+            pt.title = UnityWebRequest.UnEscapeURL(json["product_list"][i]["title"].ToString());
+            pt.description = UnityWebRequest.UnEscapeURL(json["product_list"][i]["description"].ToString());
+            pt.image = UnityWebRequest.UnEscapeURL(json["product_list"][i]["image"].ToString());
+            pt.market_id = int.Parse(json["product_list"][i]["market_id"].ToString()); ;
 
-                Global.productList.Add(pt);
-            }
-        }
-        else if(market_id == 2)
-        {//BestBuy
-            for (int i = 0; i < json["product_list"].Count; i++)
-            {
-                Product pt = new Product();
-                pt.product_id = long.Parse(json["product_list"][i]["listing_id"].ToString());
-                pt.title = UnityWebRequest.UnEscapeURL(json["product_list"][i]["title"].ToString());
-                pt.description = UnityWebRequest.UnEscapeURL(json["product_list"][i]["description"].ToString());
-                pt.image = UnityWebRequest.UnEscapeURL(json["product_list"][i]["image"].ToString());
-                pt.market_id = 1;
-
-                Global.productList.Add(pt);
-            }
-        }
-        else if(market_id == 3)
-        {//Wish
-            for (int i = 0; i < json["product_list"].Count; i++)
-            {
-                Product pt = new Product();
-                pt.product_id = long.Parse(json["product_list"][i]["listing_id"].ToString());
-                pt.title = UnityWebRequest.UnEscapeURL(json["product_list"][i]["title"].ToString());
-                pt.description = UnityWebRequest.UnEscapeURL(json["product_list"][i]["description"].ToString());
-                pt.image = UnityWebRequest.UnEscapeURL(json["product_list"][i]["image"].ToString());
-                pt.market_id = 1;
-
-                Global.productList.Add(pt);
-            }
+            Global.productList.Add(pt);
         }
 
-        Global.Shuffle<Product>(Global.productList);
+        //Global.Shuffle<Product>(Global.productList);
 
         if (isFirstLoading)
         {
