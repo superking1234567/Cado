@@ -114,14 +114,16 @@ public class Product
     public string title;
     public string description;
     public string image;
+    public string price;
     public int market_id;
 
 
-    public Product(long product_id, string title, string description, int market_id, string image)
+    public Product(long product_id, string title, string description, int market_id, string image, string price)
     {
         this.product_id = product_id;
         this.title = title;
         this.description = description;
+        this.price = price;
         this.image = image;
     }
 

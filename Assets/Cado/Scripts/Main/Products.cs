@@ -123,7 +123,8 @@ public class Products : MonoBehaviour
             pt.title = UnityWebRequest.UnEscapeURL(json["product_list"][i]["title"].ToString());
             pt.description = UnityWebRequest.UnEscapeURL(json["product_list"][i]["description"].ToString());
             pt.image = UnityWebRequest.UnEscapeURL(json["product_list"][i]["image"].ToString());
-            pt.market_id = int.Parse(json["product_list"][i]["market_id"].ToString()); ;
+            pt.market_id = int.Parse(json["product_list"][i]["market_id"].ToString());
+            pt.price = json["product_list"][i]["price"].ToString();
 
             Global.productList.Add(pt);
         }
@@ -349,6 +350,7 @@ public class Products : MonoBehaviour
         dpTitle.text = product.title;
         dpImage.texture = topCard.transform.Find("imgProduct").GetComponent<RawImage>().texture;
         dpDescription.text = product.description;
+        dpPrice.text = product.price;
 
         if(product.market_id == 1)
         {//Etsy
