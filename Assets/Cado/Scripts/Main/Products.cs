@@ -20,6 +20,9 @@ public class Products : MonoBehaviour
     public Text dpPrice;
     public Text dpDescription;
 
+    public Sprite[] logos = new Sprite[3];
+    public Image dpLogo;
+
     private bool isUpdating = false;
     private bool isFirstLoading = true;
 
@@ -44,7 +47,7 @@ public class Products : MonoBehaviour
             }
         }
 
-        if(cardList.Count > 0)
+        if(cardList.Count > 0 && !DetailPopup.activeInHierarchy)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -346,6 +349,19 @@ public class Products : MonoBehaviour
         dpTitle.text = product.title;
         dpImage.texture = topCard.transform.Find("imgProduct").GetComponent<RawImage>().texture;
         dpDescription.text = product.description;
+
+        if(product.market_id == 1)
+        {//Etsy
+            dpLogo.sprite = logos[0];
+        }
+        else if(product.market_id == 2)
+        {//BestBuy
+            dpLogo.sprite = logos[1];
+        }
+        else if(product.market_id == 3)
+        {//Wish
+            dpLogo.sprite = logos[2];
+        }
 
         DetailPopup.GetComponent<ProductDetail>().url = "http://www.google.com";
         DetailPopup.SetActive(true);
