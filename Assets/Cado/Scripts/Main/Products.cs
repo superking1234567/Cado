@@ -125,6 +125,7 @@ public class Products : MonoBehaviour
             pt.image = UnityWebRequest.UnEscapeURL(json["product_list"][i]["image"].ToString());
             pt.market_id = int.Parse(json["product_list"][i]["market_id"].ToString());
             pt.price = json["product_list"][i]["price"].ToString();
+            pt.url = json["product_list"][i]["url"].ToString();
 
             Global.productList.Add(pt);
         }
@@ -365,7 +366,7 @@ public class Products : MonoBehaviour
             dpLogo.sprite = logos[2];
         }
 
-        DetailPopup.GetComponent<ProductDetail>().url = "http://www.google.com";
+        DetailPopup.GetComponent<ProductDetail>().url = UnityWebRequest.UnEscapeURL(product.url);
         DetailPopup.SetActive(true);
 
         //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
