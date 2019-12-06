@@ -20,9 +20,11 @@ public class MainManager : MonoBehaviour
     public GameObject Dashboard;
     public GameObject Categories;
     public GameObject Products;
+    public GameObject MyItems;
 
     public GameObject AlertPopup;
     public GameObject LoadingPopup;
+    public GameObject DelPopup;
 
     public bool isQuit = false;
     private string push_token = "test";
@@ -460,5 +462,25 @@ public class MainManager : MonoBehaviour
     public void hideLoading()
     {
         LoadingPopup.SetActive(false);
+    }
+
+    public void ShowDelPopup(string strString)
+    {
+        DelPopup.transform.Find("Text").GetComponent<Text>().text = strString;
+        DelPopup.SetActive(true);
+    }
+
+    public void HideDelPopup()
+    {
+        DelPopup.SetActive(false);
+    }
+
+    public void onbtnDelOK()
+    {
+        if(Global.screenID == 7)
+        {//MyItem
+            MyItems.transform.GetComponent<MyItems>().deleteItem();
+        }
+        HideDelPopup();
     }
 }

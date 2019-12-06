@@ -15,6 +15,7 @@ public static class Global
     public static List<Product> productList = null;
 
     public static List<Product> myItemList = new List<Product>();
+    public static int selectedItemIndex = -1;
 
     public static void SaveUserInfo(User user)
     {

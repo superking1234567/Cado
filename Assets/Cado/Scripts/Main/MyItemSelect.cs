@@ -27,6 +27,7 @@ public class MyItemSelect : MonoBehaviour
 
     public void OnItemDeleted()
     {
-
+        Global.selectedItemIndex = Global.myItemList.FindIndex(x => x.product_id == product_id && x.market_id == market_id);
+        GameObject.Find("MainManager").GetComponent<MainManager>().ShowDelPopup("Do you really want to delete it?");
     }
 }

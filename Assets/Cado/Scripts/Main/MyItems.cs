@@ -10,6 +10,7 @@ public class MyItems : MonoBehaviour
     public MainManager mm;
     public GameObject ProductList;
     public GameObject myItemPrefab;
+    public GameObject pagination;
     public GameObject btnPresent;
     public GameObject btnBin;
     public GameObject Loading;
@@ -17,10 +18,11 @@ public class MyItems : MonoBehaviour
     private bool isbtnPresentSelected = false;
     private bool isbtnBinSelected = false;
 
+    private int curPage = 1;
+    private int totalPages = 1;
     // Start is called before the first frame update
     void Start()
     {
-        //initUI();
     }
 
     // Update is called once per frame
@@ -31,14 +33,21 @@ public class MyItems : MonoBehaviour
 
     public void initUI()
     {
-        Color colorV;
-        ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
-
-        ColorBlock theColor = btnPresent.GetComponent<Button>().colors;
-        theColor.normalColor = colorV;
-        theColor.highlightedColor = colorV;
-        btnPresent.GetComponent<Button>().colors = theColor;
-        isbtnPresentSelected = true;
+        if (!isbtnPresentSelected && !isbtnBinSelected)
+        {
+            onbtnPresent();
+        }
+        else
+        {
+            if (isbtnPresentSelected)
+            {
+                present();
+            }
+            else if (isbtnBinSelected)
+            {
+                bin();
+            }
+        }
     }
 
     public void onbtnPresent()
@@ -48,6 +57,12 @@ public class MyItems : MonoBehaviour
             return;
         }
 
+        curPage = 1;
+        present();
+    }
+
+    public void present()
+    {
         Color colorV;
 
         ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
@@ -74,6 +89,12 @@ public class MyItems : MonoBehaviour
             return;
         }
 
+        curPage = 1;
+        bin();
+    }
+
+    public void bin()
+    {
         Color colorV;
 
         ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
@@ -93,17 +114,49 @@ public class MyItems : MonoBehaviour
         GetProductList(Global.m_user.id, 2);
     }
 
+    public void onbtnNext()
+    {
+        curPage++;
+        if (isbtnPresentSelected)
+        {
+            present();
+        }
+        else if (isbtnBinSelected)
+        {
+            bin();
+        }
+    }
+
+    public void onbtnPrev()
+    {
+        curPage--;
+        if (isbtnPresentSelected)
+        {
+            present();
+        }
+        else if (isbtnBinSelected)
+        {
+            bin();
+        }
+    }
+
     public void GetProductList(long user_id, int type)
     {
         foreach (Transform child in ProductList.transform)
         {
+            if (child.gameObject == pagination) {
+                pagination.transform.SetParent(this.transform);
+                continue;
+            } 
             Destroy(child.gameObject);
         }
         Resources.UnloadUnusedAssets();
+        pagination.SetActive(false);
 
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         formData.Add(new MultipartFormDataSection("user_id", user_id.ToString()));
         formData.Add(new MultipartFormDataSection("type", type.ToString()));
+        formData.Add(new MultipartFormDataSection("page", curPage.ToString()));
 
         string requestURL = Global.DOMAIN + "/API/GetMyItemList.aspx";
         UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
@@ -138,6 +191,8 @@ public class MyItems : MonoBehaviour
             mm.ShowAlertPopup(resText);
             yield break;
         }
+
+        totalPages = int.Parse(json["totalPages"].ToString());
 
         Global.myItemList.Clear();
         for (int i = 0; i < json["products"].Count; i++)
@@ -192,6 +247,33 @@ public class MyItems : MonoBehaviour
             temp.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
             temp.SetActive(true);
         }
+
+        if(totalPages > 1)
+        {
+            pagination.transform.Find("Text").GetComponent<Text>().text = curPage + " of " + totalPages;
+
+            if(curPage > 1)
+            {
+                pagination.transform.Find("prev").GetComponent<Button>().enabled = true;
+            }
+            else
+            {
+                pagination.transform.Find("prev").GetComponent<Button>().enabled = false;
+            }
+
+            if(curPage < totalPages)
+            {
+                pagination.transform.Find("next").GetComponent<Button>().enabled = true;
+            }
+            else
+            {
+                pagination.transform.Find("next").GetComponent<Button>().enabled = false;
+            }
+
+            pagination.transform.SetParent(ProductList.transform);
+            pagination.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            pagination.SetActive(true);
+        }
     }
 
     IEnumerator LoadImage(RawImage rawImage, string image)
@@ -204,5 +286,61 @@ public class MyItems : MonoBehaviour
             yield break;
         }
         rawImage.texture = ((DownloadHandlerTexture)www.downloadHandler).texture;
+    }
+
+    public void deleteItem()
+    {
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        formData.Add(new MultipartFormDataSection("user_id", Global.m_user.id.ToString()));
+        formData.Add(new MultipartFormDataSection("product_id", Global.myItemList[Global.selectedItemIndex].product_id.ToString()));
+        formData.Add(new MultipartFormDataSection("market_id", Global.myItemList[Global.selectedItemIndex].market_id.ToString()));
+
+        string requestURL = Global.DOMAIN + "/API/DelMyItem.aspx";
+        UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
+        StartCoroutine(ResponseDelMyItem(www));
+    }
+
+    IEnumerator ResponseDelMyItem(UnityWebRequest www)
+    {
+        Loading.SetActive(true);
+        yield return www.SendWebRequest();
+        Loading.SetActive(false);
+        if (www.isNetworkError || www.isHttpError)
+        {
+            mm.isQuit = true;
+            mm.ShowAlertPopup("Please confirm internet.");
+            yield break;
+        }
+
+        string resultData = www.downloadHandler.text;
+        if (string.IsNullOrEmpty(resultData))
+        {
+            mm.ShowAlertPopup("Server api error!");
+            yield break;
+        }
+
+        JsonData json = JsonMapper.ToObject(resultData);
+        string response = json["success"].ToString();
+
+        if (response != "1")
+        {
+            string resText = json["responseText"].ToString();
+            mm.ShowAlertPopup(resText);
+            yield break;
+        }
+
+        if(Global.myItemList.Count == 1)
+        {
+            curPage--;
+        }
+
+        if (isbtnPresentSelected)
+        {
+            present();
+        }
+        else if (isbtnBinSelected)
+        {
+            bin();
+        }
     }
 }
