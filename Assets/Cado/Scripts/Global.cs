@@ -14,6 +14,8 @@ public static class Global
     public static List<Category> categoryList = new List<Category>();
     public static List<Product> productList = null;
 
+    public static List<Product> myItemList = new List<Product>();
+
     public static void SaveUserInfo(User user)
     {
         PlayerPrefs.SetString("user.id", user.id.ToString());
@@ -111,7 +113,7 @@ public class Category
 
 public class Product
 {
-    public long product_id;
+    public string product_id;
     public string title;
     public string description;
     public string image;
@@ -120,7 +122,7 @@ public class Product
     public int market_id;
 
 
-    public Product(long product_id, string title, string description, int market_id, string image, string price, string url)
+    public Product(string product_id, string title, string description, int market_id, string image, string price, string url)
     {
         this.product_id = product_id;
         this.title = title;

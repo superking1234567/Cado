@@ -27,13 +27,11 @@ public class Categories : MonoBehaviour
     void Start()
     {
         initCategoryUI();
-        GetCategoryList(1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void initCategoryUI()

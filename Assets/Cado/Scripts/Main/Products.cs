@@ -119,7 +119,7 @@ public class Products : MonoBehaviour
         for (int i = 0; i < json["product_list"].Count; i++)
         {
             Product pt = new Product();
-            pt.product_id = long.Parse(json["product_list"][i]["listing_id"].ToString());
+            pt.product_id = json["product_list"][i]["product_id"].ToString();
             pt.title = UnityWebRequest.UnEscapeURL(json["product_list"][i]["title"].ToString());
             pt.description = UnityWebRequest.UnEscapeURL(json["product_list"][i]["description"].ToString());
             pt.image = UnityWebRequest.UnEscapeURL(json["product_list"][i]["image"].ToString());
@@ -307,6 +307,7 @@ public class Products : MonoBehaviour
         formData.Add(new MultipartFormDataSection("title", UnityWebRequest.EscapeURL(product.title)));
         formData.Add(new MultipartFormDataSection("description", UnityWebRequest.EscapeURL(product.description)));
         formData.Add(new MultipartFormDataSection("image", UnityWebRequest.EscapeURL(product.image)));
+        formData.Add(new MultipartFormDataSection("url", UnityWebRequest.EscapeURL(product.url.ToString())));
         formData.Add(new MultipartFormDataSection("market_id", product.market_id.ToString()));
         formData.Add(new MultipartFormDataSection("value", value.ToString()));
 

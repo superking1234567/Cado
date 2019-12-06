@@ -262,6 +262,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa53a5916a5be74bbc4cbc94168e286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  product_id: 
+  product_name: 
+  market_id: -1
 --- !u!1 &501576368937347792
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +409,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa53a5916a5be74bbc4cbc94168e286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  product_id: 
+  product_name: 
+  market_id: -1
 --- !u!1 &501576369697352483
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,6 +556,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa53a5916a5be74bbc4cbc94168e286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  product_id: 
+  product_name: 
+  market_id: -1
 --- !u!1 &8588928147297416684
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,7 +624,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 8f69cf7f3ab4d10449953fd0f3679d2a, type: 3}
+  m_Texture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -943,7 +952,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 8f69cf7f3ab4d10449953fd0f3679d2a, type: 3}
+  m_Texture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1094,7 +1103,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 8f69cf7f3ab4d10449953fd0f3679d2a, type: 3}
+  m_Texture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -1245,6 +1254,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fa53a5916a5be74bbc4cbc94168e286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  product_id: 
+  product_name: 
+  market_id: -1
 --- !u!1 &8919180161029790816
 GameObject:
   m_ObjectHideFlags: 0
@@ -1438,7 +1450,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 8f69cf7f3ab4d10449953fd0f3679d2a, type: 3}
+  m_Texture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
   m_UVRect:
     serializedVersion: 2
     x: 0

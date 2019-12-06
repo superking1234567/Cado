@@ -3517,7 +3517,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 520118670}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -3564,7 +3564,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1068953905}
+      - m_Target: {fileID: 520118671}
         m_MethodName: onbtnBin
         m_Mode: 1
         m_Arguments:
@@ -4788,8 +4788,8 @@ RectTransform:
   m_Children:
   - {fileID: 1566990298}
   - {fileID: 362304598}
-  - {fileID: 385710497}
   - {fileID: 1510243162}
+  - {fileID: 385710497}
   - {fileID: 2048714095}
   - {fileID: 1098047278}
   m_Father: {fileID: 702776934}
@@ -4812,6 +4812,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4692c388e452dd346b375dbcf56dcfd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mm: {fileID: 706481446}
+  ProductList: {fileID: 1124926565}
+  myItemPrefab: {fileID: 501576368213044420, guid: 439a2c2e32f1ac345bb88d1bd87c5656,
+    type: 3}
+  btnPresent: {fileID: 1510243161}
+  btnBin: {fileID: 385710496}
+  Loading: {fileID: 1098047277}
 --- !u!114 &520118672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6992,7 +6999,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0001517035}
+  m_AnchoredPosition: {x: 0, y: -0.00009856118}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &727291890
@@ -10870,7 +10877,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1098047278
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10885,9 +10892,9 @@ RectTransform:
   m_Father: {fileID: 520118670}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 80}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -290}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1098047279
@@ -11193,7 +11200,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00010616317}
+  m_AnchoredPosition: {x: 0, y: -0.000093261326}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1124926567
@@ -13753,7 +13760,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 520118670}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -13800,7 +13807,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1068953905}
+      - m_Target: {fileID: 520118671}
         m_MethodName: onbtnPresent
         m_Mode: 1
         m_Arguments:

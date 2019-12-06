@@ -136,6 +136,7 @@ public class Dashboard : MonoBehaviour
             Products.GetComponent<SwipeUI>().showUI(1);
         }else if(newUI == 7){
             MyItems.GetComponent<SwipeUI>().showUI(1);
+            MyItems.GetComponent<MyItems>().onbtnPresent();
         }else if (newUI == 8)
         {
             FriendFinder.GetComponent<SwipeUI>().showUI(1);
