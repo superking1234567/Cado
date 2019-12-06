@@ -47,7 +47,7 @@ public class Products : MonoBehaviour
             }
         }
 
-        if(cardList.Count > 0 && !DetailPopup.activeInHierarchy)
+        if(Global.screenID == 6 && !Global.isMenuShowed && cardList.Count > 0 && !DetailPopup.activeInHierarchy)
         {
             if (Input.GetMouseButtonDown(0))
             {

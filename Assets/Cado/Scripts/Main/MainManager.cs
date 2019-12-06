@@ -89,6 +89,7 @@ public class MainManager : MonoBehaviour
 
     public void gotoQuestion(int uiNumber = 1)
     {
+        Global.screenID = 4;
         if(uiNumber == 1)
         {//Facebook Login
             Home.GetComponent<SwipeUI>().hideUI(-1);
@@ -104,11 +105,13 @@ public class MainManager : MonoBehaviour
     {
         if(uiNumber == 1)
         {//Categories
+            Global.screenID = 5;
             Categories.transform.localPosition = new Vector3(0, 0, 0);
             Products.transform.localPosition = new Vector3(512, 0, 0);
         }
         else if(uiNumber == 2)
         {//ProductPanel
+            Global.screenID = 6;
             Global.productList = new List<Product>();
             Categories.transform.localPosition = new Vector3(512, 0, 0);
             Products.transform.localPosition = new Vector3(0, 0, 0);

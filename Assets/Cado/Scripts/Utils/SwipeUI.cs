@@ -49,6 +49,7 @@ public class SwipeUI : MonoBehaviour
                 actionTime = 0.2f;
                 this.transform.localPosition = pos2 * direction;
                 isHideUI = false;
+                if (Global.isMenuShowed) Global.isMenuShowed = false;
             }
         }
     }

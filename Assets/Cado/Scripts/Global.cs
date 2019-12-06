@@ -7,7 +7,8 @@ public static class Global
 {
     public static string DOMAIN = "http://64.202.189.210";
     //public static string DOMAIN = "http://localhost:7292";
-    public static int screenID = 1; //1: home, 2: login, 3: signup, 4: main
+    public static int screenID = 1; //1: Home, 2: Login, 3: Signup, 4: Question, 5: Categories, 6: Products(Home), 7: My Items, 8: Friend Finder, 9: Calendar, 10: Notifications, 11: Settings
+    public static bool isMenuShowed = false;
 
     public static User m_user = null;
     public static List<Category> categoryList = new List<Category>();
