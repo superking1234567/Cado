@@ -17,6 +17,8 @@ public static class Global
     public static List<Product> myItemList = new List<Product>();
     public static int selectedItemIndex = -1;
 
+    public static List<User> friendList = new List<User>();
+
     public static void SaveUserInfo(User user)
     {
         PlayerPrefs.SetString("user.id", user.id.ToString());

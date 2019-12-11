@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class MyItemSelect : MonoBehaviour
+public class ItemSelect : MonoBehaviour
 {
     public string product_id = "";
     public string product_name = "";
@@ -22,7 +23,8 @@ public class MyItemSelect : MonoBehaviour
 
     public void OnItemSelected()
     {
-
+        Global.selectedItemIndex = Global.myItemList.FindIndex(x => x.product_id == product_id && x.market_id == market_id);
+        GameObject.Find("Canvas/Dashboard").GetComponent<Dashboard>().ShowDetailPopup(Global.myItemList[Global.selectedItemIndex], this.transform.Find("RawImage").GetComponent<RawImage>());
     }
 
     public void OnItemDeleted()

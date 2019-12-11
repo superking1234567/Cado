@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class MyItems : MonoBehaviour
+public class Items : MonoBehaviour
 {
     public MainManager mm;
     public GameObject ProductList;
@@ -20,6 +20,7 @@ public class MyItems : MonoBehaviour
 
     private int curPage = 1;
     private int totalPages = 1;
+    private long user_id = -1;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,8 +32,9 @@ public class MyItems : MonoBehaviour
         
     }
 
-    public void initUI()
+    public void initUI(long user_id)
     {
+        this.user_id = user_id;
         if (!isbtnPresentSelected && !isbtnBinSelected)
         {
             onbtnPresent();
@@ -79,7 +81,7 @@ public class MyItems : MonoBehaviour
         btnBin.GetComponent<Button>().colors = theColor;
         isbtnBinSelected = false;
 
-        GetProductList(Global.m_user.id, 1);
+        GetProductList(user_id, 1);
     }
 
     public void onbtnBin()
@@ -140,7 +142,7 @@ public class MyItems : MonoBehaviour
         }
     }
 
-    public void GetProductList(long user_id, int type)
+    public void GetProductList(long user_id, int rate)
     {
         foreach (Transform child in ProductList.transform)
         {
@@ -155,15 +157,15 @@ public class MyItems : MonoBehaviour
 
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
         formData.Add(new MultipartFormDataSection("user_id", user_id.ToString()));
-        formData.Add(new MultipartFormDataSection("type", type.ToString()));
+        formData.Add(new MultipartFormDataSection("rate", rate.ToString()));
         formData.Add(new MultipartFormDataSection("page", curPage.ToString()));
 
         string requestURL = Global.DOMAIN + "/API/GetMyItemList.aspx";
         UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
-        StartCoroutine(ResponseGetProductList(www));
+        StartCoroutine(ResponseGetProductList(www, rate));
     }
 
-    IEnumerator ResponseGetProductList(UnityWebRequest www)
+    IEnumerator ResponseGetProductList(UnityWebRequest www, int rate)
     {
         Loading.SetActive(true);
         yield return www.SendWebRequest();
@@ -200,9 +202,11 @@ public class MyItems : MonoBehaviour
             Product pt = new Product();
             pt.product_id = json["products"][i]["product_id"].ToString();
             pt.title = UnityWebRequest.UnEscapeURL(json["products"][i]["title"].ToString());
+            pt.description = UnityWebRequest.UnEscapeURL(json["products"][i]["description"].ToString());
+            pt.price = json["products"][i]["price"].ToString();
             pt.image = UnityWebRequest.UnEscapeURL(json["products"][i]["image"].ToString());
+            pt.url = UnityWebRequest.UnEscapeURL(json["products"][i]["url"].ToString());
             pt.market_id = int.Parse(json["products"][i]["market_id"].ToString());
-            pt.url = json["products"][i]["url"].ToString();
 
             Global.myItemList.Add(pt);
         }
@@ -234,10 +238,15 @@ public class MyItems : MonoBehaviour
                     string image = Global.myItemList[i + j].image;
                     int market_id = Global.myItemList[i + j].market_id;
 
-                    temp.transform.Find("item" + j).GetComponent<MyItemSelect>().product_id = product_id;
-                    temp.transform.Find("item" + j).GetComponent<MyItemSelect>().product_name = product_name;
-                    temp.transform.Find("item" + j).GetComponent<MyItemSelect>().market_id = market_id;
+                    temp.transform.Find("item" + j).GetComponent<ItemSelect>().product_id = product_id;
+                    temp.transform.Find("item" + j).GetComponent<ItemSelect>().product_name = product_name;
+                    temp.transform.Find("item" + j).GetComponent<ItemSelect>().market_id = market_id;
                     temp.transform.Find("item" + j + "/Text").GetComponent<Text>().text = product_name;
+
+                    if(Global.m_user.id != user_id)
+                    {
+                        temp.transform.Find("item" + j + "/btnClose").gameObject.SetActive(false);
+                    }
 
                     StartCoroutine(LoadImage(temp.transform.Find("item" + j + "/RawImage").GetComponent<RawImage>(), image));
                 }
@@ -342,5 +351,10 @@ public class MyItems : MonoBehaviour
         {
             bin();
         }
+    }
+
+    public void onbtnClose()
+    {
+        this.gameObject.SetActive(false);
     }
 }

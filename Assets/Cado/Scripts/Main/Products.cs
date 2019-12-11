@@ -8,20 +8,12 @@ using UnityEngine.UI;
 public class Products : MonoBehaviour
 {
     public MainManager mm;
+    public Dashboard db;
     public GameObject CardPanel;
     public GameObject cardPrefab;
     public GameObject Loading;
 
     public GameObject btnInfo;
-
-    public GameObject DetailPopup;
-    public Text dpTitle;
-    public RawImage dpImage;
-    public Text dpPrice;
-    public Text dpDescription;
-
-    public Sprite[] logos = new Sprite[3];
-    public Image dpLogo;
 
     private bool isUpdating = false;
     private bool isFirstLoading = true;
@@ -47,7 +39,7 @@ public class Products : MonoBehaviour
             }
         }
 
-        if(Global.screenID == 6 && !Global.isMenuShowed && cardList.Count > 0 && !DetailPopup.activeInHierarchy)
+        if(Global.screenID == 6 && !Global.isMenuShowed && cardList.Count > 0 && !db.DetailPopup.activeInHierarchy)
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -297,7 +289,7 @@ public class Products : MonoBehaviour
         StartCoroutine(SetRating(product, 1));
     }
 
-    IEnumerator SetRating(Product product, int value)
+    IEnumerator SetRating(Product product, int rate)
     {
         yield return new WaitForEndOfFrame();
 
@@ -306,10 +298,11 @@ public class Products : MonoBehaviour
         formData.Add(new MultipartFormDataSection("product_id", product.product_id.ToString()));
         formData.Add(new MultipartFormDataSection("title", UnityWebRequest.EscapeURL(product.title)));
         formData.Add(new MultipartFormDataSection("description", UnityWebRequest.EscapeURL(product.description)));
+        formData.Add(new MultipartFormDataSection("price", UnityWebRequest.EscapeURL(product.price)));
         formData.Add(new MultipartFormDataSection("image", UnityWebRequest.EscapeURL(product.image)));
         formData.Add(new MultipartFormDataSection("url", UnityWebRequest.EscapeURL(product.url.ToString())));
         formData.Add(new MultipartFormDataSection("market_id", product.market_id.ToString()));
-        formData.Add(new MultipartFormDataSection("value", value.ToString()));
+        formData.Add(new MultipartFormDataSection("rate", rate.ToString()));
 
         string requestURL = Global.DOMAIN + "/API/SetRating.aspx";
         UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
@@ -349,63 +342,7 @@ public class Products : MonoBehaviour
     {
         GameObject topCard = cardList[cardList.Count - 1];
         Product product = productList[productList.Count - 1];
-        dpTitle.text = product.title;
-        dpImage.texture = topCard.transform.Find("imgProduct").GetComponent<RawImage>().texture;
-        dpDescription.text = product.description;
-        dpPrice.text = product.price;
 
-        if(product.market_id == 1)
-        {//Etsy
-            dpLogo.sprite = logos[0];
-        }
-        else if(product.market_id == 2)
-        {//BestBuy
-            dpLogo.sprite = logos[1];
-        }
-        else if(product.market_id == 3)
-        {//Wish
-            dpLogo.sprite = logos[2];
-        }
-
-        DetailPopup.GetComponent<ProductDetail>().url = UnityWebRequest.UnEscapeURL(product.url);
-        DetailPopup.SetActive(true);
-
-        //List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        //formData.Add(new MultipartFormDataSection("market_id", product.market_id.ToString()));
-        //formData.Add(new MultipartFormDataSection("product_id", product.product_id.ToString()));
-
-        //string requestURL = Global.DOMAIN + "/API/GetProduct.aspx";
-        //UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
-        //StartCoroutine(ResponseGetProductList(www));
-    }
-
-    IEnumerator ResponseGetProduct(UnityWebRequest www)
-    {
-        yield return www.SendWebRequest();
-        if (www.isNetworkError || www.isHttpError)
-        {
-            mm.isQuit = true;
-            mm.ShowAlertPopup("Please confirm internet.");
-            yield break;
-        }
-
-        string resultData = www.downloadHandler.text;
-        if (string.IsNullOrEmpty(resultData))
-        {
-            mm.ShowAlertPopup("Server api error!");
-            yield break;
-        }
-
-        JsonData json = JsonMapper.ToObject(resultData);
-        string response = json["success"].ToString();
-
-        if (response != "1")
-        {
-            string resText = json["responseText"].ToString();
-            mm.ShowAlertPopup(resText);
-            yield break;
-        }
-
-        DetailPopup.SetActive(true);
+        db.ShowDetailPopup(product, topCard.transform.Find("imgProduct").GetComponent<RawImage>());
     }
 }

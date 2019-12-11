@@ -21,6 +21,7 @@ public class MainManager : MonoBehaviour
     public GameObject Categories;
     public GameObject Products;
     public GameObject MyItems;
+    public GameObject FriendItems;
 
     public GameObject AlertPopup;
     public GameObject LoadingPopup;
@@ -479,7 +480,7 @@ public class MainManager : MonoBehaviour
     {
         if(Global.screenID == 7)
         {//MyItem
-            MyItems.transform.GetComponent<MyItems>().deleteItem();
+            MyItems.transform.GetComponent<Items>().deleteItem();
         }
         HideDelPopup();
     }
