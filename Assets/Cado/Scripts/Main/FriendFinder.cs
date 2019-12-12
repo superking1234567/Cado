@@ -49,6 +49,7 @@ public class FriendFinder : MonoBehaviour
         Resources.UnloadUnusedAssets();
 
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+        formData.Add(new MultipartFormDataSection("user_id", Global.m_user.id.ToString()));
         formData.Add(new MultipartFormDataSection("search_key", search_key));
 
         string requestURL = Global.DOMAIN + "/API/GetUserList.aspx";
