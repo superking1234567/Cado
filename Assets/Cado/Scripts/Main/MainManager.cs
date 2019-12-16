@@ -428,6 +428,7 @@ public class MainManager : MonoBehaviour
         string firstname = UnityWebRequest.UnEscapeURL(json["firstname"].ToString());
         string lastname = UnityWebRequest.UnEscapeURL(json["lastname"].ToString());
         string question_list = UnityWebRequest.UnEscapeURL(json["question_list"].ToString());
+        string category_list = UnityWebRequest.UnEscapeURL(json["category_list"].ToString());
         string last_login = UnityWebRequest.UnEscapeURL(json["last_login"].ToString());
         string reg_date = UnityWebRequest.UnEscapeURL(json["reg_date"].ToString());
 
@@ -447,6 +448,17 @@ public class MainManager : MonoBehaviour
         Global.m_user.last_login = DateTime.Parse(last_login);
         Global.m_user.device_type = device_type;
         Global.m_user.reg_date = DateTime.Parse(reg_date);
+
+        Global.categoryList.Clear();
+        JsonData categories = JsonMapper.ToObject(category_list);
+        for (int i=0; i< categories.Count; i++)
+        {
+            Category ct = new Category();
+            ct.id = categories[i]["category_id"].ToString();
+            ct.name = categories[i]["category_name"].ToString();
+            ct.market_id = int.Parse(categories[i]["market_id"].ToString());
+            Global.categoryList.Add(ct);
+        }
 
         PlayerPrefs.SetInt("auto_login", 1);
         PlayerPrefs.Save();

@@ -13,6 +13,7 @@ public class Categories : MonoBehaviour
     public GameObject btnEtsy;
     public GameObject btnBestBuy;
     public GameObject btnWish;
+    public GameObject btnClose;
 
     public GameObject LoadingBar;
 
@@ -130,6 +131,11 @@ public class Categories : MonoBehaviour
             temp.SetActive(true);
         }
 
+    }
+
+    public void onbtnClose()
+    {
+        this.transform.localPosition = new Vector3(512.0f, 0.0f, 0.0f);
     }
 
     public void onbtnCategorySave()
@@ -294,6 +300,13 @@ public class Categories : MonoBehaviour
             yield break;
         }
 
-        dashboard.gotoProductPanel();
+        if (!btnClose.activeInHierarchy)
+        {
+            dashboard.gotoProductPanel();
+        }
+        else
+        {
+            onbtnClose();
+        }
     }
 }

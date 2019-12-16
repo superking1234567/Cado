@@ -55,7 +55,7 @@ public class CategorySelect : MonoBehaviour
             isSelected = false;
             ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
 
-            int index = Global.categoryList.FindLastIndex(x => x.id == category_id);
+            int index = Global.categoryList.FindLastIndex(x => x.id == category_id && x.market_id == market_id);
             Global.categoryList.RemoveAt(index);
         }
 

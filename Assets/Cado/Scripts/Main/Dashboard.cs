@@ -13,6 +13,7 @@ public class Dashboard : MonoBehaviour
     public GameObject Products;
     public GameObject MyItems;
     public GameObject FriendFinder;
+    public GameObject Settings;
 
     public GameObject Menu;
     public GameObject[] menuItems;
@@ -40,7 +41,7 @@ public class Dashboard : MonoBehaviour
         Products.GetComponent<SwipeUI>().showUI(1);
     }
 
-    public void onbtnSetting()
+    public void onbtnMenu()
     {
         Color colorV;
         ColorUtility.TryParseHtmlString("#64CAFF", out colorV);
@@ -128,25 +129,50 @@ public class Dashboard : MonoBehaviour
         hideMenuPopup();
     }
 
+    public void onbtnSettings()
+    {
+        int oldUI = Global.screenID;
+        int newUI = 11;
+        if (oldUI == newUI)
+            return;
+
+        gotoScreenUI(oldUI, newUI);
+        hideMenuPopup();
+    }
+
     public void gotoScreenUI(int oldUI, int newUI)
     {
         if (DetailPopup.activeInHierarchy) DetailPopup.SetActive(false);
 
         //6: Products(Home), 7: My Items, 8: Friend Finder, 9: Calendar, 10: Notifications, 11: Settings
-        if (oldUI == 6){
+        if (oldUI == 6)
+        {
             Products.GetComponent<SwipeUI>().hideUI(-1);
-        }else if(oldUI == 7){
+        }
+        else if(oldUI == 7)
+        {
             MyItems.GetComponent<SwipeUI>().hideUI(-1);
-        }else if (oldUI == 8){
+        }
+        else if (oldUI == 8)
+        {
             FriendFinder.GetComponent<SwipeUI>().hideUI(-1);
         }
+        else if (oldUI == 11)
+        {
+            Settings.GetComponent<SwipeUI>().hideUI(-1);
+        }
 
-        if (newUI == 6){
+
+        if (newUI == 6)
+        {
             Products.GetComponent<SwipeUI>().showUI(1);
-        }else if(newUI == 7){
+        }
+        else if(newUI == 7)
+        {
             MyItems.GetComponent<SwipeUI>().showUI(1);
             MyItems.GetComponent<Items>().initUI(Global.m_user.id);
-        }else if (newUI == 8)
+        }
+        else if (newUI == 8)
         {
             if (mm.FriendItems.activeInHierarchy)
             {
@@ -155,6 +181,11 @@ public class Dashboard : MonoBehaviour
             FriendFinder.GetComponent<SwipeUI>().showUI(1);
             FriendFinder.GetComponent<FriendFinder>().initUI();
         }
+        else if (newUI == 11)
+        {
+            Settings.GetComponent<SwipeUI>().showUI(1);
+        }
+
 
         Global.screenID = newUI;
     }
