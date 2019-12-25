@@ -11,6 +11,8 @@ public static class Global
     public static bool isMenuShowed = false;
 
     public static User m_user = null;
+    public static List<Children> m_childrenList = new List<Children>();
+
     public static List<Category> categoryList = new List<Category>();
     public static List<Product> productList = null;
 
@@ -35,6 +37,7 @@ public static class Global
         PlayerPrefs.SetString("user.last_login", user.last_login.ToString());
         PlayerPrefs.SetInt("user.device_type", user.device_type);
         PlayerPrefs.SetString("user.reg_date", user.reg_date.ToString());
+        PlayerPrefs.SetString("user.children_id", user.children_id.ToString());
         PlayerPrefs.Save();
     }
 
@@ -55,7 +58,7 @@ public static class Global
         user.last_login = DateTime.Parse(PlayerPrefs.GetString("user.last_login"));
         user.device_type = int.Parse(PlayerPrefs.GetString("user.device_type"));
         user.reg_date = DateTime.Parse(PlayerPrefs.GetString("user.reg_date"));
-
+        user.children_id = int.Parse(PlayerPrefs.GetString("user.children_id"));
         return user;
     }
 
@@ -92,11 +95,24 @@ public class User
     public DateTime last_login;
     public int device_type;
     public DateTime reg_date;
+    public long children_id;
 
     public float point_amount;
 
     public User() { }
 }
+
+public class Children
+{
+    public long id;
+    public string firstname;
+    public string lastname;
+    public string reg_date;
+
+    public Children() { }
+}
+
+
 
 public class Category
 {

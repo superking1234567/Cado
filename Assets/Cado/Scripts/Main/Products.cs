@@ -74,7 +74,17 @@ public class Products : MonoBehaviour
         isUpdating = true;
 
         List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-        formData.Add(new MultipartFormDataSection("user_id", Global.m_user.id.ToString()));
+
+        if(Global.m_user.children_id == 0)
+        {
+            formData.Add(new MultipartFormDataSection("user_id", Global.m_user.id.ToString()));
+            formData.Add(new MultipartFormDataSection("type", "1"));
+        }
+        else
+        {
+            formData.Add(new MultipartFormDataSection("user_id", Global.m_user.children_id.ToString()));
+            formData.Add(new MultipartFormDataSection("type", "2"));
+        }
 
         string requestURL = Global.DOMAIN + "/API/GetProductList.aspx";
         UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);

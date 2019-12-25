@@ -211,6 +211,7 @@ public class MainManager : MonoBehaviour
         Global.m_user.last_login = DateTime.Now;
         Global.m_user.device_type = device_type;
         Global.m_user.reg_date = DateTime.Parse(reg_date);
+        Global.m_user.children_id = 0;
 
         gotoQuestion(1);
     }
@@ -270,8 +271,11 @@ public class MainManager : MonoBehaviour
         string firstname = UnityWebRequest.UnEscapeURL(json["firstname"].ToString());
         string lastname = UnityWebRequest.UnEscapeURL(json["lastname"].ToString());
         string question_list = UnityWebRequest.UnEscapeURL(json["question_list"].ToString());
+        string category_list = UnityWebRequest.UnEscapeURL(json["category_list"].ToString());
         string last_login = UnityWebRequest.UnEscapeURL(json["last_login"].ToString());
         string reg_date = UnityWebRequest.UnEscapeURL(json["reg_date"].ToString());
+        long children_id = long.Parse(json["children_id"].ToString());
+        JsonData children_list = json["children_list"];
 
         Global.m_user = new User();
         Global.m_user.id = id;
@@ -289,6 +293,30 @@ public class MainManager : MonoBehaviour
         Global.m_user.last_login = DateTime.Parse(last_login);
         Global.m_user.device_type = device_type;
         Global.m_user.reg_date = DateTime.Parse(reg_date);
+        Global.m_user.children_id = children_id;
+
+        Global.m_childrenList.Clear();
+        for(int i=0; i<children_list.Count; i++)
+        {
+            Children children = new Children();
+            children.id = long.Parse(children_list[i]["id"].ToString());
+            children.firstname = UnityWebRequest.UnEscapeURL(children_list[i]["firstname"].ToString());
+            children.lastname = UnityWebRequest.UnEscapeURL(children_list[i]["lastname"].ToString());
+            children.reg_date = UnityWebRequest.UnEscapeURL(children_list[i]["reg_date"].ToString());
+
+            Global.m_childrenList.Add(children);
+        }
+
+        Global.categoryList.Clear();
+        JsonData categories = JsonMapper.ToObject(category_list);
+        for (int i = 0; i < categories.Count; i++)
+        {
+            Category ct = new Category();
+            ct.id = categories[i]["category_id"].ToString();
+            ct.name = categories[i]["category_name"].ToString();
+            ct.market_id = int.Parse(categories[i]["market_id"].ToString());
+            Global.categoryList.Add(ct);
+        }
 
         PlayerPrefs.SetInt("auto_login", 1);
         PlayerPrefs.Save();
@@ -370,6 +398,7 @@ public class MainManager : MonoBehaviour
         Global.m_user.last_login = DateTime.Now;
         Global.m_user.device_type = device_type;
         Global.m_user.reg_date = DateTime.Parse(reg_date);
+        Global.m_user.children_id = 0;
 
         gotoQuestion(2);
     }
@@ -431,6 +460,8 @@ public class MainManager : MonoBehaviour
         string category_list = UnityWebRequest.UnEscapeURL(json["category_list"].ToString());
         string last_login = UnityWebRequest.UnEscapeURL(json["last_login"].ToString());
         string reg_date = UnityWebRequest.UnEscapeURL(json["reg_date"].ToString());
+        long children_id = long.Parse(json["children_id"].ToString());
+        JsonData children_list = json["children_list"];
 
         Global.m_user = new User();
         Global.m_user.id = id;
@@ -448,6 +479,19 @@ public class MainManager : MonoBehaviour
         Global.m_user.last_login = DateTime.Parse(last_login);
         Global.m_user.device_type = device_type;
         Global.m_user.reg_date = DateTime.Parse(reg_date);
+        Global.m_user.children_id = children_id;
+
+        Global.m_childrenList.Clear();
+        for (int i = 0; i < children_list.Count; i++)
+        {
+            Children children = new Children();
+            children.id = long.Parse(children_list[i]["id"].ToString());
+            children.firstname = UnityWebRequest.UnEscapeURL(children_list[i]["firstname"].ToString());
+            children.lastname = UnityWebRequest.UnEscapeURL(children_list[i]["lastname"].ToString());
+            children.reg_date = UnityWebRequest.UnEscapeURL(children_list[i]["reg_date"].ToString());
+
+            Global.m_childrenList.Add(children);
+        }
 
         Global.categoryList.Clear();
         JsonData categories = JsonMapper.ToObject(category_list);

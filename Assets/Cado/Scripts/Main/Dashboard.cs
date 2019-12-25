@@ -9,6 +9,7 @@ public class Dashboard : MonoBehaviour
 {
     public MainManager mm;
 
+    public GameObject ChildrenList;
     public GameObject Categories;
     public GameObject Products;
     public GameObject MyItems;
@@ -16,6 +17,7 @@ public class Dashboard : MonoBehaviour
     public GameObject Settings;
 
     public GameObject Menu;
+    public Text username;
     public GameObject[] menuItems;
 
     public GameObject DetailPopup;
@@ -30,7 +32,20 @@ public class Dashboard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Global.m_user != null)
+        {
+            if(Global.m_user.children_id == 0)
+            {
+                username.text = Global.m_user.firstname + " " + Global.m_user.lastname;
+            }
+            else
+            {
+                string firstname = Global.m_childrenList.Find(x => x.id == Global.m_user.children_id).firstname;
+                string lastname = Global.m_childrenList.Find(x => x.id == Global.m_user.children_id).lastname;
+
+                username.text = firstname + " " + lastname;
+            }
+        }
     }
 
     public void gotoProductPanel()
@@ -96,6 +111,17 @@ public class Dashboard : MonoBehaviour
         showMenuPopup();
     }
 
+    public void onbtnUsername()
+    {
+        int oldUI = Global.screenID;
+        int newUI = 12;
+        if (oldUI == newUI)
+            return;
+
+        gotoScreenUI(oldUI, newUI);
+        hideMenuPopup();
+    }
+
     public void onbtnHome()
     {
         int oldUI = Global.screenID;
@@ -144,7 +170,7 @@ public class Dashboard : MonoBehaviour
     {
         if (DetailPopup.activeInHierarchy) DetailPopup.SetActive(false);
 
-        //6: Products(Home), 7: My Items, 8: Friend Finder, 9: Calendar, 10: Notifications, 11: Settings
+        //6: Products(Home), 7: My Items, 8: Friend Finder, 9: Calendar, 10: Notifications, 11: Settings, 12: ChildrenList
         if (oldUI == 6)
         {
             Products.GetComponent<SwipeUI>().hideUI(-1);
@@ -160,6 +186,10 @@ public class Dashboard : MonoBehaviour
         else if (oldUI == 11)
         {
             Settings.GetComponent<SwipeUI>().hideUI(-1);
+        }
+        else if(oldUI == 12)
+        {
+            ChildrenList.GetComponent<SwipeUI>().hideUI(-1);
         }
 
 
@@ -184,6 +214,12 @@ public class Dashboard : MonoBehaviour
         else if (newUI == 11)
         {
             Settings.GetComponent<SwipeUI>().showUI(1);
+            Settings.GetComponent<Settings>().initUI();
+        }
+        else if (newUI == 12)
+        {
+            ChildrenList.GetComponent<SwipeUI>().showUI(1);
+            ChildrenList.GetComponent<ChildrenList>().initUI();
         }
 
 
