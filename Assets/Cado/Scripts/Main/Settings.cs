@@ -33,6 +33,7 @@ public class Settings : MonoBehaviour
 
     public void onbtnRegisterChildren()
     {
+        RegisterChildren.GetComponent<RegisterChildren>().initUI();
         RegisterChildren.SetActive(true);
     }
 }

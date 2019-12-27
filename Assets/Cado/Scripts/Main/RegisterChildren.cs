@@ -24,6 +24,12 @@ public class RegisterChildren : MonoBehaviour
         
     }
 
+    public void initUI()
+    {
+        FirstName.text = "";
+        LastName.text = "";
+    }
+
     public void onbtnAddChildren()
     {
         string firstname = FirstName.text;
@@ -89,5 +95,7 @@ public class RegisterChildren : MonoBehaviour
         children.reg_date = json["reg_date"].ToString();
 
         Global.m_childrenList.Add(children);
+
+        mm.Dashboard.GetComponent<Dashboard>().onbtnHome();
     }
 }
