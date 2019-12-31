@@ -12,6 +12,8 @@ public class CategorySelect : MonoBehaviour
     private Button btnCategory;
     public bool isSelected = false;
 
+    public bool isChildrenCategory = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,15 +50,30 @@ public class CategorySelect : MonoBehaviour
             ColorUtility.TryParseHtmlString("#6FCAF3", out colorV);
 
             Category category = new Category(category_id, category_name, market_id);
-            Global.categoryList.Add(category);
+            if (!isChildrenCategory)
+            {
+                Global.categoryList.Add(category);
+            }
+            else
+            {
+                Global.childrenCategoryList.Add(category);
+            }
         }
         else
         {
             isSelected = false;
             ColorUtility.TryParseHtmlString("#FFFFFF", out colorV);
 
-            int index = Global.categoryList.FindLastIndex(x => x.id == category_id && x.market_id == market_id);
-            Global.categoryList.RemoveAt(index);
+            if (!isChildrenCategory)
+            {
+                int index = Global.categoryList.FindLastIndex(x => x.id == category_id && x.market_id == market_id);
+                Global.categoryList.RemoveAt(index);
+            }
+            else
+            {
+                int index = Global.childrenCategoryList.FindLastIndex(x => x.id == category_id && x.market_id == market_id);
+                Global.childrenCategoryList.RemoveAt(index);
+            }
         }
 
         ColorBlock theColor = btnCategory.colors;

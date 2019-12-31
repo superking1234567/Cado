@@ -96,6 +96,11 @@ public class RegisterChildren : MonoBehaviour
 
         Global.m_childrenList.Add(children);
 
-        mm.Dashboard.GetComponent<Dashboard>().onbtnHome();
+
+        mm.Categories.GetComponent<Categories>().btnClose.SetActive(false);
+        mm.Categories.GetComponent<Categories>().isChildrenCategory = true;
+        mm.Categories.GetComponent<Categories>().children_id = children.id;
+        mm.Categories.GetComponent<Categories>().GetCategoryList(1);
+        mm.Categories.transform.localPosition = new Vector3(0, 0, 0);
     }
 }

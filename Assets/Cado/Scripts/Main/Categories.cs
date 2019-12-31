@@ -24,6 +24,9 @@ public class Categories : MonoBehaviour
     public MainManager mm;
     public Dashboard dashboard;
 
+    public bool isChildrenCategory = false;
+    public long children_id = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +50,8 @@ public class Categories : MonoBehaviour
         btnEtsy.transform.Find("Text").GetComponent<Text>().color = Color.white;
         isbtnEtsySelected = true;
 
+        isChildrenCategory = false;
+        children_id = 0;
         GetCategoryList(1);
     }
 
@@ -118,10 +123,22 @@ public class Categories : MonoBehaviour
                     temp.transform.Find("item" + j).GetComponent<CategorySelect>().market_id = market_id;
                     temp.transform.Find("item" + j + "/Text").GetComponent<Text>().text = category_name;
 
-                    int index = Global.categoryList.FindIndex(x => x.id == category_id && x.market_id == market_id);
-                    if (index > -1)
+                    temp.transform.Find("item" + j).GetComponent<CategorySelect>().isChildrenCategory = isChildrenCategory;
+                    if (!isChildrenCategory)
                     {
-                        temp.transform.Find("item" + j).GetComponent<CategorySelect>().isSelected = true;
+                        int index = Global.categoryList.FindIndex(x => x.id == category_id && x.market_id == market_id);
+                        if (index > -1)
+                        {
+                            temp.transform.Find("item" + j).GetComponent<CategorySelect>().isSelected = true;
+                        }
+                    }
+                    else
+                    {
+                        int index = Global.childrenCategoryList.FindIndex(x => x.id == category_id && x.market_id == market_id);
+                        if (index > -1)
+                        {
+                            temp.transform.Find("item" + j).GetComponent<CategorySelect>().isSelected = true;
+                        }
                     }
                 }
             }
@@ -140,13 +157,26 @@ public class Categories : MonoBehaviour
 
     public void onbtnCategorySave()
     {
-        if(Global.categoryList.Count == 0)
+        if (!isChildrenCategory)
         {
-            mm.ShowAlertPopup("Please select a category.");
-            return;
-        }
+            if (Global.categoryList.Count == 0)
+            {
+                mm.ShowAlertPopup("Please select a category.");
+                return;
+            }
 
-        SetCategoryList();
+            SetCategoryList();
+        }
+        else
+        {
+            if (Global.childrenCategoryList.Count == 0)
+            {
+                mm.ShowAlertPopup("Please select a category.");
+                return;
+            }
+
+            SetChildrenCategoryList(children_id);
+        }
     }
 
     public void onbtnEtsy()
@@ -309,4 +339,55 @@ public class Categories : MonoBehaviour
             onbtnClose();
         }
     }
+
+    public void SetChildrenCategoryList(long children_id)
+    {
+        List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+
+        string jsonData = JsonMapper.ToJson(Global.childrenCategoryList.ToArray());
+        formData.Add(new MultipartFormDataSection("children_id", children_id.ToString()));
+        formData.Add(new MultipartFormDataSection("data", UnityWebRequest.EscapeURL(jsonData)));
+
+        string requestURL = Global.DOMAIN + "/API/SetChildrenCategoryList.aspx";
+        UnityWebRequest www = UnityWebRequest.Post(requestURL, formData);
+        StartCoroutine(ResponseSetChildrenCategoryList(www));
+    }
+
+    IEnumerator ResponseSetChildrenCategoryList(UnityWebRequest www)
+    {
+        mm.showLoading();
+        yield return www.SendWebRequest();
+        mm.hideLoading();
+
+        if (www.isNetworkError || www.isHttpError)
+        {
+            mm.isQuit = true;
+            mm.ShowAlertPopup("Please confirm internet.");
+            yield break;
+        }
+
+        string resultData = www.downloadHandler.text;
+        if (string.IsNullOrEmpty(resultData))
+        {
+            mm.ShowAlertPopup("Server api error!");
+            yield break;
+        }
+
+        JsonData json = JsonMapper.ToObject(resultData);
+        string response = json["success"].ToString();
+
+        if (response != "1")
+        {
+            string resText = json["responseText"].ToString();
+            mm.ShowAlertPopup(resText);
+            yield break;
+        }
+
+
+        mm.Categories.GetComponent<Categories>().initCategoryUI();
+        mm.Categories.transform.localPosition = new Vector3(512, -512, 0);
+
+        dashboard.onbtnHome();
+    }
+
 }

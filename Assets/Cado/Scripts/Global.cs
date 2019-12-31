@@ -14,6 +14,7 @@ public static class Global
     public static List<Children> m_childrenList = new List<Children>();
 
     public static List<Category> categoryList = new List<Category>();
+    public static List<Category> childrenCategoryList = new List<Category>();
     public static List<Product> productList = null;
 
     public static List<Product> myItemList = new List<Product>();
