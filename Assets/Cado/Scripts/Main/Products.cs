@@ -83,6 +83,8 @@ public class Products : MonoBehaviour
         else
         {
             formData.Add(new MultipartFormDataSection("user_id", Global.m_user.children_id.ToString()));
+            formData.Add(new MultipartFormDataSection("user_id", Global.m_user.children_id.ToString()));
+            formData.Add(new MultipartFormDataSection("user_id", Global.m_user.children_id.ToString()));
             formData.Add(new MultipartFormDataSection("type", "2"));
         }
 

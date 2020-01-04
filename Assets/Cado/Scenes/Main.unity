@@ -4377,7 +4377,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00006106597}
+  m_AnchoredPosition: {x: 0, y: -0.00006217877}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &428600538
@@ -7704,7 +7704,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00011906209}
+  m_AnchoredPosition: {x: 0, y: -0.0001209267}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &727291890
@@ -9955,6 +9955,8 @@ MonoBehaviour:
   isbtnWishSelected: 0
   mm: {fileID: 706481446}
   dashboard: {fileID: 702776936}
+  isChildrenCategory: 0
+  children_id: 0
 --- !u!1 &932424500
 GameObject:
   m_ObjectHideFlags: 0

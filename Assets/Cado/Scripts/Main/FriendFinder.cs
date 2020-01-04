@@ -13,6 +13,8 @@ public class FriendFinder : MonoBehaviour
     public InputField tbxSearch;
     public GameObject Loading;
 
+    public bool isSearching = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,9 @@ public class FriendFinder : MonoBehaviour
 
     public void onSearch()
     {
+        if (isSearching) return;
+        isSearching = true;
+
         string search_key = tbxSearch.text;
         if (string.IsNullOrEmpty(search_key))
         {
@@ -61,6 +66,7 @@ public class FriendFinder : MonoBehaviour
     {
         Loading.SetActive(true);
         yield return www.SendWebRequest();
+        isSearching = false;
         Loading.SetActive(false);
         if (www.isNetworkError || www.isHttpError)
         {
